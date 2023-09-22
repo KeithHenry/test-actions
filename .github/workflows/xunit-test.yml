@@ -25,7 +25,7 @@ jobs:
                   {
                     "regexp": "^[\\s\\S]*?(?=\\s*at\\s)",
                     "loop": true
-                  }
+                  },
                   {
                     "regexp": "^\\s*at\\s(.*)\\s+in\\s+(.*):line\\s+(\\d+)\\s*$",
                     "file": 2,
