@@ -5,9 +5,6 @@ on: workflow_dispatch
 jobs:
   ci:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
 
     steps:
     - name: Add problem matcher
@@ -21,10 +18,6 @@ jobs:
                   {
                     "regexp": "^\\s*Failed\\s(.*)$",
                     "message": 1
-                  },
-                  {
-                    "regexp": "^[\\s\\S]*?(?=\\s*at\\s)",
-                    "loop": true
                   },
                   {
                     "regexp": "^\\s*at\\s(.*)\\s+in\\s+(.*):line\\s+(\\d+)\\s*$",
@@ -41,31 +34,24 @@ jobs:
         echo "$PWD/xunit.json"
         cat -n "$PWD/xunit.json"
         echo "::add-matcher::$PWD/xunit.json"
+
     - name: Dumping Logs
       env:
         LOGS: |
-          Starting test execution, please wait...
-          A total of 1 test files matched the specified pattern.
-          [xUnit.net 00:00:00.55]     Library.Tests.UnitTest1.DeliberateFail2 [FAIL]
-          [xUnit.net 00:00:00.56]     Library.Tests.UnitTest1.DeliberateFail1 [FAIL]
-            Failed Library.Tests.UnitTest1.DeliberateFail2 [< 1 ms]
-            Error Message:
-             System.Exception : Error message
-            Stack Trace:
-               at Library.Tests.UnitTest1.DeliberateFail2() in /home/runner/work/Library/Library.Tests/UnitTest1.cs:line 30
-             at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
-             at System.Reflection.MethodInvoker.Invoke(Object obj, IntPtr* args, BindingFlags invokeAttr)
-            Failed Library.Tests.UnitTest1.DeliberateFail1 [< 1 ms]
-            Error Message:
-             Assert.True() Failure
-          Expected: True
-          Actual:   False
-            Stack Trace:
-               at Library.Tests.UnitTest1.DeliberateFail1() in /home/runner/work/Library/Library.Tests/UnitTest1.cs:line 27
-             at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
-             at System.Reflection.MethodInvoker.Invoke(Object obj, IntPtr* args, BindingFlags invokeAttr)
+          Failed Library.Tests.UnitTest1.DeliberateFail1 [< 1 ms]
+            at Library.Tests.UnitTest1.DeliberateFail1() in /home/runner/work/Library/Library.Tests/UnitTests.cs:line 1
+          Failed Library.Tests.UnitTest1.DeliberateFail2 [< 1 ms]
+          Error Message:
+           System.Exception : Error message
+          Stack Trace:
+             at Library.Tests.UnitTest1.DeliberateFail2() in /home/runner/work/Library/Library.Tests/UnitTest1.cs:line 30
+           at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+           at System.Reflection.MethodInvoker.Invoke(Object obj, IntPtr* args, BindingFlags invokeAttr)
+          Failed Library.Tests.UnitTest1.DeliberateFail3 [< 1 ms]
+            at Library.Tests.UnitTest1.DeliberateFail3() in /home/runner/work/Library/Library.Tests/UnitTests.cs:line 60
       run: |
         echo "$LOGS"
+
     - name: Remove problem matcher
       run: |
         echo "::remove-matcher::$PWD/xunit.json"
